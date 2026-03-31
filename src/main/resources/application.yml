@@ -1,0 +1,11 @@
+git spring:
+  application:
+    name: settlement
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.finbit.settlement: DEBUG
