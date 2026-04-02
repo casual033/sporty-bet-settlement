@@ -18,7 +18,7 @@ import java.util.Map;
  * Beta uses {@code "home"}, {@code "draw"}, {@code "away"} for odds keys and outcomes.
  */
 @Component
-public class BetaFeedMapper {
+public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
 
     private static final String ODDS = "ODDS";
     private static final String SETTLEMENT = "SETTLEMENT";
@@ -29,6 +29,7 @@ public class BetaFeedMapper {
             "away", MatchOutcome.AWAY
     );
 
+    @Override
     public SportEventMessage toSportEventMessage(BetaFeedMessage message) {
         return switch (message.type()) {
             case ODDS -> mapOddsChange(message);

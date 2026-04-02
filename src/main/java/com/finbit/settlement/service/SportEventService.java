@@ -4,6 +4,7 @@ import com.finbit.settlement.dto.alpha.AlphaFeedMessage;
 import com.finbit.settlement.dto.beta.BetaFeedMessage;
 import com.finbit.settlement.mapper.AlphaFeedMapper;
 import com.finbit.settlement.mapper.BetaFeedMapper;
+import com.finbit.settlement.mapper.FeedMapper;
 import com.finbit.settlement.model.SportEventMessage;
 import com.finbit.settlement.publisher.EventPublisher;
 import org.slf4j.Logger;
@@ -31,15 +32,17 @@ public class SportEventService {
     }
 
     public SportEventMessage processAlphaFeed(AlphaFeedMessage message) {
-        log.debug("Processing Alpha feed message: type={}, eventId={}", message.msgType(), message.eventId());
-        SportEventMessage normalized = alphaFeedMapper.toSportEventMessage(message);
-        eventPublisher.publish(normalized);
-        return normalized;
+        log.debug("Processing Alpha feed: type={}, eventId={}", message.msgType(), message.eventId());
+        return normalizeAndPublish(alphaFeedMapper, message);
     }
 
     public SportEventMessage processBetaFeed(BetaFeedMessage message) {
-        log.debug("Processing Beta feed message: type={}, eventId={}", message.type(), message.eventId());
-        SportEventMessage normalized = betaFeedMapper.toSportEventMessage(message);
+        log.debug("Processing Beta feed: type={}, eventId={}", message.type(), message.eventId());
+        return normalizeAndPublish(betaFeedMapper, message);
+    }
+
+    private <T> SportEventMessage normalizeAndPublish(FeedMapper<T> mapper, T message) {
+        SportEventMessage normalized = mapper.toSportEventMessage(message);
         eventPublisher.publish(normalized);
         return normalized;
     }

@@ -17,7 +17,7 @@ import java.util.Map;
  * Alpha uses {@code "1"}, {@code "X"}, {@code "2"} for 1X2 market keys and outcomes.
  */
 @Component
-public class AlphaFeedMapper {
+public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
 
     private static final String ODDS_UPDATE = "odds_update";
     private static final String SETTLEMENT = "settlement";
@@ -28,6 +28,7 @@ public class AlphaFeedMapper {
             "2", MatchOutcome.AWAY
     );
 
+    @Override
     public SportEventMessage toSportEventMessage(AlphaFeedMessage message) {
         return switch (message.msgType()) {
             case ODDS_UPDATE -> mapOddsChange(message);
