@@ -20,3 +20,86 @@ regardless of the original source.
 |----------|----------|
 | ProviderAlpha | `POST /provider-alpha/feed` |
 | ProviderBeta | `POST /provider-beta/feed` |
+
+## Prerequisites
+
+- Java 17+
+
+## Build
+
+```bash
+./mvnw clean package
+```
+
+## Run
+
+```bash
+./mvnw spring-boot:run
+```
+
+The service starts on `http://localhost:8080`.
+
+## Test
+
+```bash
+./mvnw test
+```
+
+## Example Requests
+
+### ProviderAlpha — Odds Update
+
+```bash
+curl -X POST http://localhost:8080/provider-alpha/feed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "msg_type": "odds_update",
+    "event_id": "ev123",
+    "values": { "1": 2.0, "X": 3.1, "2": 3.8 }
+  }'
+```
+
+### ProviderAlpha — Settlement
+
+```bash
+curl -X POST http://localhost:8080/provider-alpha/feed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "msg_type": "settlement",
+    "event_id": "ev123",
+    "outcome": "1"
+  }'
+```
+
+### ProviderBeta — Odds Update
+
+```bash
+curl -X POST http://localhost:8080/provider-beta/feed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "ODDS",
+    "event_id": "ev456",
+    "odds": { "home": 1.95, "draw": 3.2, "away": 4.0 }
+  }'
+```
+
+### ProviderBeta — Settlement
+
+```bash
+curl -X POST http://localhost:8080/provider-beta/feed \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "SETTLEMENT",
+    "event_id": "ev456",
+    "result": "away"
+  }'
+```
+
+## Architecture
+
+The service follows a layered architecture:
+
+1. **Controllers** receive raw JSON from each provider
+2. **Mappers** convert provider-specific DTOs into a normalized internal model
+3. **Service** orchestrates the mapping and publishes the result
+4. **Publisher** sends normalized messages to a message queue (in-memory mock for this exercise)
