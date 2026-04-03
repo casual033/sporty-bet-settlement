@@ -14,7 +14,7 @@
     <groupId>com.finbit</groupId>
     <artifactId>settlement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>settlement</name>
+    <name>settlement-feed-standardization</name>
     <description>Settlement Feed Standardization Service</description>
 
     <properties>

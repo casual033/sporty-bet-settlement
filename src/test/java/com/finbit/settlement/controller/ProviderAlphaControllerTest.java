@@ -93,4 +93,15 @@ class ProviderAlphaControllerTest {
 
         assertThat(eventPublisher.getPublishedMessages()).isEmpty();
     }
+
+    @Test
+    void malformedJsonReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/provider-alpha/feed")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ invalid json }"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title").value("Unreadable request"));
+
+        assertThat(eventPublisher.getPublishedMessages()).isEmpty();
+    }
 }
