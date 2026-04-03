@@ -3,6 +3,7 @@ package com.finbit.settlement.mapper;
 import com.finbit.settlement.dto.alpha.AlphaFeedMessage;
 import com.finbit.settlement.exception.UnknownMessageTypeException;
 import com.finbit.settlement.model.BetSettlement;
+import com.finbit.settlement.model.MarketType;
 import com.finbit.settlement.model.MatchOutcome;
 import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
@@ -51,6 +52,7 @@ public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
         }
         return new OddsChange(
                 message.eventId(),
+                MarketType.MATCH_RESULT,
                 values.get("1"),
                 values.get("X"),
                 values.get("2"),
@@ -63,6 +65,6 @@ public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
         if (outcome == null) {
             throw new IllegalArgumentException("Unknown Alpha outcome: " + message.outcome());
         }
-        return new BetSettlement(message.eventId(), outcome, Instant.now(clock));
+        return new BetSettlement(message.eventId(), MarketType.MATCH_RESULT, outcome, Instant.now(clock));
     }
 }

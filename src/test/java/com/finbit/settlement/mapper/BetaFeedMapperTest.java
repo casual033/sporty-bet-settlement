@@ -5,6 +5,7 @@ import com.finbit.settlement.dto.beta.BetaFeedMessage;
 import com.finbit.settlement.dto.beta.BetaOdds;
 import com.finbit.settlement.exception.UnknownMessageTypeException;
 import com.finbit.settlement.model.BetSettlement;
+import com.finbit.settlement.model.MarketType;
 import com.finbit.settlement.model.MatchOutcome;
 import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
@@ -44,6 +45,7 @@ class BetaFeedMapperTest {
         assertThat(result).isInstanceOf(OddsChange.class);
         OddsChange odds = (OddsChange) result;
         assertThat(odds.eventId()).isEqualTo("ev456");
+        assertThat(odds.marketType()).isEqualTo(MarketType.MATCH_RESULT);
         assertThat(odds.homeOdds()).isEqualByComparingTo("1.95");
         assertThat(odds.drawOdds()).isEqualByComparingTo("3.2");
         assertThat(odds.awayOdds()).isEqualByComparingTo("4.0");
@@ -62,6 +64,7 @@ class BetaFeedMapperTest {
         assertThat(result).isInstanceOf(BetSettlement.class);
         BetSettlement settlement = (BetSettlement) result;
         assertThat(settlement.eventId()).isEqualTo("ev456");
+        assertThat(settlement.marketType()).isEqualTo(MarketType.MATCH_RESULT);
         assertThat(settlement.outcome()).isEqualTo(MatchOutcome.AWAY);
         assertThat(settlement.receivedAt()).isEqualTo(FIXED_TIME);
     }

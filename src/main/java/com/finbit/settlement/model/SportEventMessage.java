@@ -9,5 +9,7 @@ public sealed interface SportEventMessage permits OddsChange, BetSettlement {
 
     String eventId();
 
+    MarketType marketType();
+
     Instant receivedAt();
 }

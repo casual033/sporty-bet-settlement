@@ -4,6 +4,7 @@ import com.finbit.settlement.dto.beta.BetaFeedMessage;
 import com.finbit.settlement.dto.beta.BetaOdds;
 import com.finbit.settlement.exception.UnknownMessageTypeException;
 import com.finbit.settlement.model.BetSettlement;
+import com.finbit.settlement.model.MarketType;
 import com.finbit.settlement.model.MatchOutcome;
 import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
@@ -52,6 +53,7 @@ public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
         }
         return new OddsChange(
                 message.eventId(),
+                MarketType.MATCH_RESULT,
                 odds.home(),
                 odds.draw(),
                 odds.away(),
@@ -64,6 +66,6 @@ public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
         if (outcome == null) {
             throw new IllegalArgumentException("Unknown Beta outcome: " + message.result());
         }
-        return new BetSettlement(message.eventId(), outcome, Instant.now(clock));
+        return new BetSettlement(message.eventId(), MarketType.MATCH_RESULT, outcome, Instant.now(clock));
     }
 }

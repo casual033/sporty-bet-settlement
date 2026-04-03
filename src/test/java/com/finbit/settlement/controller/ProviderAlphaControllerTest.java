@@ -50,6 +50,7 @@ class ProviderAlphaControllerTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId").value("ev123"))
+                .andExpect(jsonPath("$.marketType").value("MATCH_RESULT"))
                 .andExpect(jsonPath("$.homeOdds").value(2.0))
                 .andExpect(jsonPath("$.drawOdds").value(3.1))
                 .andExpect(jsonPath("$.awayOdds").value(3.8));
@@ -68,6 +69,7 @@ class ProviderAlphaControllerTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId").value("ev123"))
+                .andExpect(jsonPath("$.marketType").value("MATCH_RESULT"))
                 .andExpect(jsonPath("$.outcome").value("HOME"));
 
         List<SportEventMessage> published = eventPublisher.getPublishedMessages();

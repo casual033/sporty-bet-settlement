@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finbit.settlement.dto.alpha.AlphaFeedMessage;
 import com.finbit.settlement.exception.UnknownMessageTypeException;
 import com.finbit.settlement.model.BetSettlement;
+import com.finbit.settlement.model.MarketType;
 import com.finbit.settlement.model.MatchOutcome;
 import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
@@ -44,6 +45,7 @@ class AlphaFeedMapperTest {
         assertThat(result).isInstanceOf(OddsChange.class);
         OddsChange odds = (OddsChange) result;
         assertThat(odds.eventId()).isEqualTo("ev123");
+        assertThat(odds.marketType()).isEqualTo(MarketType.MATCH_RESULT);
         assertThat(odds.homeOdds()).isEqualByComparingTo("2.0");
         assertThat(odds.drawOdds()).isEqualByComparingTo("3.1");
         assertThat(odds.awayOdds()).isEqualByComparingTo("3.8");
@@ -62,6 +64,7 @@ class AlphaFeedMapperTest {
         assertThat(result).isInstanceOf(BetSettlement.class);
         BetSettlement settlement = (BetSettlement) result;
         assertThat(settlement.eventId()).isEqualTo("ev123");
+        assertThat(settlement.marketType()).isEqualTo(MarketType.MATCH_RESULT);
         assertThat(settlement.outcome()).isEqualTo(MatchOutcome.HOME);
         assertThat(settlement.receivedAt()).isEqualTo(FIXED_TIME);
     }
