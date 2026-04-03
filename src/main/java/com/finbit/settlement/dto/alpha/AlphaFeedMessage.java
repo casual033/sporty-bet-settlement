@@ -1,5 +1,6 @@
 package com.finbit.settlement.dto.alpha;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.Map;
  * settlements ({@code msg_type = "settlement"}) in a single DTO,
  * with nullable fields depending on the message type.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record AlphaFeedMessage(
         @JsonProperty("msg_type") String msgType,
         @JsonProperty("event_id") String eventId,

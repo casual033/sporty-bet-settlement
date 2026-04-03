@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,9 +37,13 @@ class ProviderAlphaControllerTest {
         eventPublisher.clear();
     }
 
+    private String loadFixture(String path) throws Exception {
+        return new ClassPathResource(path).getContentAsString(StandardCharsets.UTF_8);
+    }
+
     @Test
     void oddsUpdateReturnsNormalizedOddsChange() throws Exception {
-        String json = Files.readString(Path.of("src/test/resources/alpha/odds_update.json"));
+        String json = loadFixture("alpha/odds_update.json");
 
         mockMvc.perform(post("/provider-alpha/feed")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +61,7 @@ class ProviderAlphaControllerTest {
 
     @Test
     void settlementReturnsNormalizedBetSettlement() throws Exception {
-        String json = Files.readString(Path.of("src/test/resources/alpha/settlement.json"));
+        String json = loadFixture("alpha/settlement.json");
 
         mockMvc.perform(post("/provider-alpha/feed")
                         .contentType(MediaType.APPLICATION_JSON)

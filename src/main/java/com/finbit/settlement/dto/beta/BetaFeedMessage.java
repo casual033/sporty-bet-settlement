@@ -1,5 +1,6 @@
 package com.finbit.settlement.dto.beta;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * settlements ({@code type = "SETTLEMENT"}) in a single DTO,
  * with nullable fields depending on the message type.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record BetaFeedMessage(
         String type,
         @JsonProperty("event_id") String eventId,

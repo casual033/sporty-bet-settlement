@@ -9,6 +9,7 @@ import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.Map;
 
@@ -29,6 +30,12 @@ public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
             "away", MatchOutcome.AWAY
     );
 
+    private final Clock clock;
+
+    public BetaFeedMapper(Clock clock) {
+        this.clock = clock;
+    }
+
     @Override
     public SportEventMessage toSportEventMessage(BetaFeedMessage message) {
         return switch (message.type()) {
@@ -48,7 +55,7 @@ public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
                 odds.home(),
                 odds.draw(),
                 odds.away(),
-                Instant.now()
+                Instant.now(clock)
         );
     }
 
@@ -57,6 +64,6 @@ public class BetaFeedMapper implements FeedMapper<BetaFeedMessage> {
         if (outcome == null) {
             throw new IllegalArgumentException("Unknown Beta outcome: " + message.result());
         }
-        return new BetSettlement(message.eventId(), outcome, Instant.now());
+        return new BetSettlement(message.eventId(), outcome, Instant.now(clock));
     }
 }

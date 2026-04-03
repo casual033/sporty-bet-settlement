@@ -1,6 +1,6 @@
-git spring:
+spring:
   application:
-    name: settlement
+    name: settlement-feed-standardization
 
 server:
   port: 8080

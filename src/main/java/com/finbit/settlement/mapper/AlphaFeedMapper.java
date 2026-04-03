@@ -8,6 +8,7 @@ import com.finbit.settlement.model.OddsChange;
 import com.finbit.settlement.model.SportEventMessage;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.Map;
 
@@ -28,6 +29,12 @@ public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
             "2", MatchOutcome.AWAY
     );
 
+    private final Clock clock;
+
+    public AlphaFeedMapper(Clock clock) {
+        this.clock = clock;
+    }
+
     @Override
     public SportEventMessage toSportEventMessage(AlphaFeedMessage message) {
         return switch (message.msgType()) {
@@ -47,7 +54,7 @@ public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
                 values.get("1"),
                 values.get("X"),
                 values.get("2"),
-                Instant.now()
+                Instant.now(clock)
         );
     }
 
@@ -56,6 +63,6 @@ public class AlphaFeedMapper implements FeedMapper<AlphaFeedMessage> {
         if (outcome == null) {
             throw new IllegalArgumentException("Unknown Alpha outcome: " + message.outcome());
         }
-        return new BetSettlement(message.eventId(), outcome, Instant.now());
+        return new BetSettlement(message.eventId(), outcome, Instant.now(clock));
     }
 }

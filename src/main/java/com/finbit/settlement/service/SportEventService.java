@@ -42,8 +42,8 @@ public class SportEventService {
     }
 
     private <T> SportEventMessage normalizeAndPublish(FeedMapper<T> mapper, T message) {
-        SportEventMessage normalized = mapper.toSportEventMessage(message);
-        eventPublisher.publish(normalized);
-        return normalized;
+        SportEventMessage sportEventMessage = mapper.toSportEventMessage(message);
+        eventPublisher.publish(sportEventMessage);
+        return sportEventMessage;
     }
 }

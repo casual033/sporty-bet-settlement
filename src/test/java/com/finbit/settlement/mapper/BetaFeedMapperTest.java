@@ -13,14 +13,20 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BetaFeedMapperTest {
 
+    private static final Instant FIXED_TIME = Instant.parse("2025-06-01T12:00:00Z");
+    private static final Clock FIXED_CLOCK = Clock.fixed(FIXED_TIME, ZoneOffset.UTC);
+
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final BetaFeedMapper mapper = new BetaFeedMapper();
+    private final BetaFeedMapper mapper = new BetaFeedMapper(FIXED_CLOCK);
 
     private BetaFeedMessage readFixture(String path) throws IOException {
         return objectMapper.readValue(new ClassPathResource(path).getInputStream(), BetaFeedMessage.class);
@@ -41,7 +47,7 @@ class BetaFeedMapperTest {
         assertThat(odds.homeOdds()).isEqualByComparingTo("1.95");
         assertThat(odds.drawOdds()).isEqualByComparingTo("3.2");
         assertThat(odds.awayOdds()).isEqualByComparingTo("4.0");
-        assertThat(odds.receivedAt()).isNotNull();
+        assertThat(odds.receivedAt()).isEqualTo(FIXED_TIME);
     }
 
     @Test
@@ -57,6 +63,7 @@ class BetaFeedMapperTest {
         BetSettlement settlement = (BetSettlement) result;
         assertThat(settlement.eventId()).isEqualTo("ev456");
         assertThat(settlement.outcome()).isEqualTo(MatchOutcome.AWAY);
+        assertThat(settlement.receivedAt()).isEqualTo(FIXED_TIME);
     }
 
     @Test
